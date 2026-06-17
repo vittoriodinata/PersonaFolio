@@ -1,5 +1,7 @@
 import React from "react";
 import { motion } from "framer-motion";
+import { playSound, selectAudio, changeAudio } from "./utils/soundManager"; 
+
 import Img1 from "./assets/sudoku.png";
 import Img2 from "./assets/poker.png";
 import Img3 from "./assets/unicomp.png";
@@ -11,8 +13,9 @@ export default function ProjectsList() {
     {
       id: 1,
       title: "Sudoku Solver",
+      role: "OCR / Model Development",
       desc: "Computer vision based Sudoku solver using CNN-based OCR to recognize puzzle digits, combined with image processing and backtracking algorithm.",
-      img: Img1, // Diperbaiki: tidak pakai kurung kurawal
+      img: Img1,
       link: "https://huggingface.co/spaces/asipnana/SudokuProject",
       rotate: "-3deg",
       borderColor: "border-white"
@@ -20,6 +23,7 @@ export default function ProjectsList() {
     {
       id: 2,
       title: "Poker Decision Advisor",
+      role: "Model Architecture & Training",
       desc: "Machine learning powered poker assistant that analyzes hand strength, board state, position, and opponent tendencies to recommend optimal actions.",
       img: Img2,
       link: "https://pokerml-ovmrb6qydwttlsyzm2sax3.streamlit.app/",
@@ -29,6 +33,7 @@ export default function ProjectsList() {
     {
       id: 3,
       title: "Unicomp Competition Website",
+      role: "Backend & Database Developer",
       desc: "A web platform for discovering and managing IT competitions, connecting participants with events, organizers, and competition information.",
       img: Img3,
       link: "https://software-engineering-project-group12.vercel.app/",
@@ -37,7 +42,8 @@ export default function ProjectsList() {
     },
     {
       id: 4,
-      title: "Music Recommender",
+      title: "AlgoRhythm: Music Recommender",
+      role: "Frontend Developer",
       desc: "Content-based music recommendation system using K-Nearest Neighbors and cosine similarity to analyze audio features and find similar tracks.",
       img: Img4,
       link: "https://music-recommender-machine-learning-final-project-tvwau93gk66ms.streamlit.app/",
@@ -47,6 +53,7 @@ export default function ProjectsList() {
     {
       id: 5,
       title: "Peer Review: AFib Detection",
+      role: "Writing & Research",
       desc: "Research paper on ECG-based Atrial Fibrillation detection using machine learning classifiers like Random Forest, SVM, and Logistic Regression.",
       img: Img5,
       link: "https://drive.google.com/file/d/1PSWlxuYv82FjgISCdFiFWKepVzMqldMh/view?usp=sharing",
@@ -72,6 +79,10 @@ export default function ProjectsList() {
             href={project.link}
             target="_blank"
             rel="noopener noreferrer"
+            // Efek suara:
+            onMouseEnter={() => playSound(changeAudio)}
+            onClick={() => playSound(selectAudio)}
+            
             initial={{ opacity: 0, y: 50, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             transition={{ type: "spring", stiffness: 100, damping: 15, delay: index * 0.1 }}
@@ -98,9 +109,20 @@ export default function ProjectsList() {
               </p>
             </div>
 
-            <div className="mt-6 pt-2 border-t-2 border-dashed border-neutral-800 group-hover:border-black flex justify-between items-center">
-              <span className="text-[10px] font-mono tracking-widest opacity-40 group-hover:opacity-100">// STATUS: COMPLETED</span>
-              <span className="text-xs font-black bg-[#d40000] text-white px-2 py-0.5 group-hover:bg-black">VIEW+</span>
+            <div className="mt-6 pt-2 border-t-2 border-dashed border-neutral-800 group-hover:border-black">
+              <div className="flex justify-between items-center mb-1">
+                <span className="text-[10px] font-black uppercase tracking-widest text-[#d40000] group-hover:text-black">
+                  ROLE: {project.role}
+                </span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-[10px] font-mono tracking-widest opacity-40 group-hover:opacity-100 italic">
+                  // STATUS: COMPLETED | 2026
+                </span>
+                <span className="text-xs font-black bg-[#d40000] text-white px-2 py-0.5 group-hover:bg-black">
+                  VIEW+
+                </span>
+              </div>
             </div>
           </motion.a>
         ))}

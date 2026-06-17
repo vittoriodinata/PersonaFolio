@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
+import { playSound, selectAudio, changeAudio, backAudio } from "./utils/soundManager";
 
 export default function Menu({ setPage }) {
   const items = ["PROFILE", "STATUS", "PROJECTS", "CONTACT"];
@@ -11,11 +12,20 @@ export default function Menu({ setPage }) {
       const key = event.key.toLowerCase();
 
       if (key === "s" || key === "d" || key === "arrowdown") {
-        setActive((prev) => (prev + 1) % items.length);
+        setActive((prev) => {
+          playSound(changeAudio);
+          return (prev + 1) % items.length;
+        });
       } else if (key === "w" || key === "a" || key === "arrowup") {
-        setActive((prev) => (prev - 1 + items.length) % items.length);
+        setActive((prev) => {
+          playSound(changeAudio);
+          return (prev - 1 + items.length) % items.length;
+        });
       } else if (key === "enter" || key === " ") {
+        playSound(selectAudio);
         setPage(items[active]);
+      } else if (key === "escape") {
+        playSound(backAudio);
       }
     };
 
@@ -28,8 +38,14 @@ export default function Menu({ setPage }) {
       {items.map((item, i) => (
         <motion.div
           key={item}
-          onMouseEnter={() => setActive(i)}
-          onClick={() => setPage(item)}
+          onMouseEnter={() => {
+            setActive(i);
+            playSound(changeAudio);
+          }}
+          onClick={() => {
+            playSound(selectAudio);
+            setPage(item);
+          }}
           animate={{
             x: active === i ? 40 : 0,
           }}
@@ -39,15 +55,8 @@ export default function Menu({ setPage }) {
             damping: 20
           }}
           className={`
-            relative
-            cursor-pointer
-            text-5xl
-            font-black
-            tracking-wider
-            rotate-[-8deg]
-            transition-colors
-            duration-200
-            pl-4
+            relative cursor-pointer text-5xl font-black tracking-wider rotate-[-8deg]
+            transition-colors duration-200 pl-4
             ${active === i ? "text-white" : "text-gray-500"}
           `}
         >

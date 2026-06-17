@@ -1,13 +1,14 @@
 import React from "react";
 import { motion } from "framer-motion";
+import { playSound, changeAudio } from "./utils/soundManager";
 
 export default function StatusChart() {
   const stats = [
-    { name: "Logic", sub: "Encyclopedic", val: 4, icon: "🧠" },
-    { name: "Projects", sub: "Masterful", val: 4, icon: "🚀" },
-    { name: "Coding", sub: "Skilled", val: 3, icon: "💻" },
-    { name: "Social", sub: "Selfless", val: 4, icon: "🤝" },
-    { name: "Design", sub: "Skilled", val: 3, icon: "🎨" },
+    { name: "Logic", sub: "Encyclopedic", val: 4 },
+    { name: "Projects", sub: "Masterful", val: 4 },
+    { name: "Coding", sub: "Skilled", val: 3 },
+    { name: "Social", sub: "Selfless", val: 4 },
+    { name: "Design", sub: "Skilled", val: 3 },
   ];
 
   // chart_config
@@ -120,6 +121,7 @@ export default function StatusChart() {
                 initial={{ opacity: 0, y: 30, scale: 0.5 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 whileHover={{ scale: 1.15, rotate: [-2, 2, -1] }}
+                onMouseEnter={() => playSound(changeAudio)}
                 transition={{
                   duration: 0.5,
                   delay: 0.5 + i * 0.1,
