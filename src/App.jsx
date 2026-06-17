@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import Menu from "./Menu.jsx";
 import Background from "./Background.jsx";
 import Profile from "./Profile.jsx";
-import StatusChart from "./Statuschart.jsx";
+import StatusChart from "./StatusChart.jsx";
 import ProjectsList from "./Projectlist.jsx";
 import ProfileView from "./Profileview.jsx";
 import Contact from "./Contact.jsx";
