@@ -86,8 +86,8 @@ export default function ProfileView() {
               ))}
             </div>
           </m.div>
-
-          // base_attributes
+          
+          {/* base_attributes */}
           <m.div
             whileHover={{ scale: 1.03, rotate: 0, y: -5 }}
             transition={{ type: "spring", stiffness: 300, damping: 15 }}
