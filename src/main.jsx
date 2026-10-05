@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import App from './App.jsx'
+import App from './app.jsx'
 import '@fontsource/arsenal/400.css'
 import '@fontsource/arsenal/400-italic.css'
 import '@fontsource/arsenal/700.css'
