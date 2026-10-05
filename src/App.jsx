@@ -1,40 +1,30 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { playSound, backAudio, playBGM } from "./utils/soundManager"; 
+import { playSound, backAudio } from "./utils/sound-manager.js";
 
-import Menu from "./Menu.jsx";
-import Background from "./Background.jsx";
-import Profile from "./Profile.jsx";
-import StatusChart from "./Statuschart.jsx"; 
-import ProjectsList from "./Projectlist.jsx";
-import ProfileView from "./Profileview.jsx";
-import Contact from "./Contact.jsx";
+import Menu, { ContactBar } from "./menu.jsx";
+import Background from "./background.jsx";
+import Profile from "./menu-profile.jsx";
+import StatusChart from "./status-chart.jsx"; 
+import ProjectsList from "./project-list.jsx";
+import ProfileView from "./profile-view.jsx";
+import Certificate from "./certificate.jsx";
+
+// Page mapping lookup object
+const PAGE_COMPONENTS = {
+  STATUS: <StatusChart />,
+  PROJECTS: <ProjectsList />,
+  PROFILE: <ProfileView />,
+  CERTIFICATE: <Certificate />,
+};
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState("HOME");
-  const [hasStarted, setHasStarted] = useState(false);
 
-  useEffect(() => {
-    const startBGM = () => {
-      if (!hasStarted) {
-        playBGM();
-        setHasStarted(true);
-      }
-    };
-
-    window.addEventListener("click", startBGM);
-    window.addEventListener("keydown", startBGM);
-
-    return () => {
-      window.removeEventListener("click", startBGM);
-      window.removeEventListener("keydown", startBGM);
-    };
-  }, [hasStarted]);
-
-  const handleGoHome = useCallback(() => {
+  const handleGoHome = () => {
     playSound(backAudio);
     setCurrentPage("HOME");
-  }, []);
+  };
 
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -45,7 +35,19 @@ export default function App() {
     
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [currentPage, handleGoHome]);
+  }, [currentPage]);
+
+  const renderContent = () => {
+    return (
+      PAGE_COMPONENTS[currentPage] || (
+        <div className="text-left pl-10 w-full">
+          <h1 className="text-7xl font-black italic tracking-tighter text-white drop-shadow-[5px_5px_0px_#800000] uppercase">
+            {currentPage}
+          </h1>
+        </div>
+      )
+    );
+  };
 
   return (
     <main className="h-screen overflow-hidden bg-black text-white relative select-none">
@@ -68,7 +70,7 @@ export default function App() {
           ) : (
             <motion.div
               key="content-page"
-              initial={{ x: 300, opacity: 0, rotate: [5, 0] }}
+              initial={{ x: 300, opacity: 0, rotate: 5 }}
               animate={{ x: 0, opacity: 1, rotate: 0 }}
               exit={{ x: 300, opacity: 0 }}
               transition={{ type: "spring", stiffness: 200, damping: 20 }}
@@ -77,33 +79,25 @@ export default function App() {
               <div className="text-left">
                 <button
                   onClick={handleGoHome}
-                  className="cursor-pointer text-2xl font-black bg-[#800000] text-white px-6 py-2 rotate-[-4deg] border-2 border-white hover:bg-white hover:text-black transition-all duration-200 shadow-[5px_5px_0px_rgba(255,255,255,0.3)]"
+                  className="cursor-pointer text-2xl font-black bg-[#800000] text-white px-6 py-2 
+                  rotate-[-4deg] border-2 border-white hover:bg-white hover:text-black 
+                  transition-all duration-200 shadow-[5px_5px_0px_rgba(255,255,255,0.3)]"
                 >
                   ◀ [BACK] ESC
                 </button>
               </div>
 
               <div className="flex-1 flex flex-col justify-center items-center w-full mt-4">
-                {currentPage === "STATUS" ? <StatusChart /> : 
-                 currentPage === "PROJECTS" ? <ProjectsList /> : 
-                 currentPage === "PROFILE" ? <ProfileView onBack={handleGoHome} /> : 
-                 currentPage === "CONTACT" ? <Contact /> : 
-                 <div className="text-left pl-10 w-full">
-                    <h1 className="text-7xl font-black italic tracking-tighter text-white drop-shadow-[5px_5px_0px_#800000] uppercase">
-                        {currentPage}
-                    </h1>
-                 </div>
-                }
+                {renderContent()}
               </div>
-
-              <div className="flex gap-1 h-3 opacity-50">
-                <div className="w-20 bg-white"></div>
-                <div className="w-4 bg-[#800000]"></div>
-                <div className="w-2 bg-white"></div>
-                <div className="w-40 bg-white"></div>
-              </div>
+              
             </motion.div>
           )}
+        </AnimatePresence>
+
+        {/* contact buttons, only on the home page */}
+        <AnimatePresence>
+          {currentPage === "HOME" && <ContactBar key="contact-bar" />}
         </AnimatePresence>
       </div>
     </main>

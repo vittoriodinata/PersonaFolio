@@ -1,11 +1,11 @@
 import React from "react";
-import bgCity from "./assets/city.png";
+import bgCity from "./assets/images/city.avif";
 
 export default function Background() {
   return (
     <div className="absolute inset-0 overflow-hidden bg-black select-none">
       <div
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-40 mix-blend-luminosity"
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-40"
         style={{ backgroundImage: `url(${bgCity})` }}
       />
 
@@ -15,8 +15,8 @@ export default function Background() {
         preserveAspectRatio="none"
       >
         <polygon
-          points="1000,0 1000,1000 0,1000 450,0"
-          fill="#800000"
+            points="1000,0 1000,1000 0,1000 450,0"
+            fill="#990900"
         />
       </svg>
     </div>

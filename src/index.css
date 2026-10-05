@@ -1,27 +1,132 @@
 @import "tailwindcss";
-
+ 
 @layer base {
   body {
     @apply bg-black text-white m-0;
-    font-family: Impact, "Arial Black", sans-serif;
+    font-family: "Arsenal", "Segoe UI", Arial, sans-serif;
     overflow-x: hidden;
   }
-
+ 
   h1, h2, h3, p {
     @apply m-0 p-0;
   }
 }
-
+ 
 @layer utilities {
   .persona-text-shadow {
-    text-shadow: 5px 5px 0 #800000;
+    text-shadow: 5px 5px 0 #900000;
   }
-
+ 
   .persona-outline {
     text-shadow: 2px 2px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;
   }
-
+ 
   .persona-bar-shadow {
     box-shadow: 3px 3px 0px #000;
   }
+}
+
+* {
+  cursor: url("/cursors/persona-5-cursor.png") 0 0, auto;
+}
+
+a,
+button,
+[role="button"],
+.cursor-pointer {
+  cursor: url("/cursors/persona-5-hover.png") 0 40, pointer;
+}
+
+/* interactive */
+
+/* ---------- all touch devices ---------- */
+@media (hover: none) {
+  * { -webkit-tap-highlight-color: transparent; }
+  a:active, button:active { transform: scale(0.96); }
+}
+main.h-screen { height: 100dvh; }
+
+/* laptops */
+@media (max-width: 1024px) {
+  main > .relative.h-full { padding-left: 3rem; padding-right: 3rem; }
+
+  [style*="width: 520px"] { zoom: 0.85; }
+
+  .text-9xl { font-size: 6.5rem; }
+  .relative.flex-none[style*="width: 1200px"] { zoom: 0.8; }
+}
+
+/*  tablets */
+@media (max-width: 800px) {
+  main { overflow-y: auto; overflow-x: hidden; }
+  main > .absolute.inset-0.overflow-hidden {
+    position: fixed;
+  }
+  main > .relative.h-full {
+    height: auto;
+    min-height: 100%;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 1.5rem;
+    padding: 2rem 1.25rem 2rem;
+  }
+  main > .relative.h-full > div.w-full.flex { 
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+  }
+  [style*="width: 520px"] { zoom: 0.75; }
+
+  .text-right.select-none { text-align: center; }
+  .text-9xl { font-size: 5rem; }
+  .min-w-\[410px\] { min-width: 0; width: 100%; }
+  .inline-flex.flex-col { display: flex; align-items: center; width: 100%; max-width: 440px; }
+
+  .absolute.bottom-8.right-20 {
+    position: static;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+
+  .absolute.inset-0.z-30 { padding: 1.25rem; overflow-y: auto; }
+  .text-2xl.font-black.bg-\[\#800000\] { font-size: 1.1rem; padding: 0.4rem 1rem; }
+  .text-6xl { font-size: 3rem; }
+
+  .sticky.top-8 { position: static; }
+
+
+  .max-h-\[85vh\].overflow-auto { justify-content: safe center; }
+  .relative.flex-none[style*="width: 1200px"] { zoom: 0.62; }
+}
+
+/* phone */
+@media (max-width: 600px) {
+  [style*="width: 520px"] { zoom: 0.62; }
+
+  .text-9xl { font-size: 3.5rem; }
+  .text-6xl { font-size: 2.25rem; }
+  .text-7xl { font-size: 2.75rem; }
+  .text-5xl { font-size: 2.25rem; }
+
+  .absolute.inset-0.z-30 { padding: 0.75rem; }
+
+  .w-36 { width: 6.5rem; font-size: 0.7rem; }
+  .w-24 { width: 5rem; font-size: 0.7rem; }
+  .-top-14 { top: -2rem; }
+  .absolute.bottom-8.right-20 a span.text-lg,
+  main a span.text-lg { font-size: 0.9rem; }
+
+  .relative.flex-none[style*="width: 1200px"] { zoom: 0.5; }
+}
+
+/* phone landscape */
+@media (max-height: 760px) and (min-width: 801px) {
+  [style*="width: 520px"] { zoom: 0.75; }
+  .text-9xl { font-size: 5.5rem; }
+}
+@media (max-height: 520px) {
+  .text-9xl { font-size: 3.5rem; }
+  .max-h-\[80vh\], .max-h-\[85vh\] { max-height: 70vh; }
 }

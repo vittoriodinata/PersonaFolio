@@ -1,22 +1,85 @@
-import React from "react";
-import { motion } from "framer-motion";
-import { playSound, changeAudio } from "./utils/soundManager";
+import React, { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { playSound, changeAudio } from "./utils/sound-manager";
+
+
+const NOTE_POSITION = {
+  "below-left" : "left-0 top-full mt-3 origin-top-left",
+  "below-right" : "right-0 top-full mt-3 origin-top-right",
+  "right" : "left-full top-0 ml-5 origin-top-left",
+  "left" : "right-full top-0 mr-5 origin-top-right",
+};
+
+function StatNote({ stat }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, scaleY: 0.1, x: stat.note === "below-right" ? 24 : -24 }}
+      animate={{ opacity: 1, scaleY: 1, x: 0 }}
+      exit={{ opacity: 0, scaleY: 0.1 }}
+      transition={{ type: "spring", stiffness: 420, damping: 28 }}
+      className={`pointer-events-none absolute z-20 w-[270px] bg-black px-5 py-4 shadow-[6px_6px_0px_rgba(212,0,0,0.85)] ${NOTE_POSITION[stat.note]}`}
+    >
+      <p className="text-sm font-bold leading-relaxed text-white">{stat.desc}</p>
+
+      <div className="mt-3 flex items-center gap-1.5">
+        {Array.from({ length: 5 }).map((_, i) => (
+          <div
+            key={i}
+            className={`h-2.5 w-5 -skew-x-12 ${i < stat.val ? "bg-[#fce300]" : "bg-neutral-700"}`}
+          />
+        ))}
+      </div>
+    </motion.div>
+  );
+}
 
 export default function StatusChart() {
-  const stats = [
-    { name: "Logic", sub: "Encyclopedic", val: 4 },
-    { name: "Projects", sub: "Masterful", val: 4 },
-    { name: "Coding", sub: "Skilled", val: 3 },
-    { name: "Social", sub: "Selfless", val: 4 },
-    { name: "Design", sub: "Skilled", val: 3 },
+  const [hovered, setHovered] = useState(null);
+
+    const stats = [
+    {
+      name: "Logic",
+      sub: "Encyclopedic",
+      val: 4,
+      note: "right",
+      desc: "Breaks complex problems into manageable steps, with a strong understanding of algorithms, data structures, and the foundations of machine learning.",
+    },
+    {
+      name: "Projects",
+      sub: "Masterful",
+      val: 4,
+      note: "below-left",
+      desc: "Enjoys turning ideas into working products, from computer vision and recommendation systems to AI applications and full-stack platforms.",
+    },
+    {
+      name: "Coding",
+      sub: "Skilled",
+      val: 3,
+      note: "right",
+      desc: "Learns best through hands-on development, constantly exploring new technologies by building, experimenting, and refining practical solutions.",
+    },
+    {
+      name: "Social",
+      sub: "Selfless",
+      val: 4,
+      note: "left",
+      desc: "Works well with others, communicates thoughtfully, and is always willing to share knowledge or lend a hand when someone gets stuck.",
+    },
+    {
+      name: "Design",
+      sub: "Skilled",
+      val: 3,
+      note: "below-right",
+      desc: "Combines technical thinking with an eye for usability, focusing on digital experiences that are intuitive, purposeful, and enjoyable to use.",
+    },
   ];
 
-  // chart_config
-  const size = 1000;
+  //config
+  const size = 1200;
   const cx = size / 2;
   const cy = size / 2;
   const maxRadius = 320;
-  const innerFactor = 0.35;
+  const innerFactor = 0.4;
 
   const getCoordinates = (isBackground = false) => {
     let tips = [];
@@ -78,7 +141,7 @@ export default function StatusChart() {
                   transition={{ duration: 0.6, delay: i * 0.1, type: "spring" }}
                   style={{ transformOrigin: `${cx}px ${cy}px` }}
                   points={`${cx},${cy} ${prevInner.x},${prevInner.y} ${tip.x},${tip.y}`}
-                  fill="#d97706"
+                  fill={hovered === i ? "#fbbf24" : "#d97706"}
                   stroke="#b45309"
                   strokeWidth="2"
                 />
@@ -89,7 +152,7 @@ export default function StatusChart() {
                   transition={{ duration: 0.6, delay: i * 0.1 + 0.05, type: "spring" }}
                   style={{ transformOrigin: `${cx}px ${cy}px` }}
                   points={`${cx},${cy} ${tip.x},${tip.y} ${nextInner.x},${nextInner.y}`}
-                  fill="#fbbf24"
+                  fill={hovered === i ? "#fff3a0" : "#fbbf24"}
                   stroke="#d97706"
                   strokeWidth="2"
                 />
@@ -110,7 +173,7 @@ export default function StatusChart() {
           return (
             <div
               key={stat.name}
-              className="absolute z-10 pointer-events-none"
+              className={`absolute pointer-events-none ${hovered === i ? "z-30" : "z-10"}`}
               style={{
                 left: `${xPos}px`,
                 top: `${yPos}px`,
@@ -121,7 +184,11 @@ export default function StatusChart() {
                 initial={{ opacity: 0, y: 30, scale: 0.5 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 whileHover={{ scale: 1.15, rotate: [-2, 2, -1] }}
-                onMouseEnter={() => playSound(changeAudio)}
+                onMouseEnter={() => {
+                  playSound(changeAudio);
+                  setHovered(i);
+                }}
+                onMouseLeave={() => setHovered(null)}
                 transition={{
                   duration: 0.5,
                   delay: 0.5 + i * 0.1,
@@ -148,6 +215,10 @@ export default function StatusChart() {
                   </span>
                 </div>
               </motion.div>
+
+              <AnimatePresence>
+                {hovered === i && <StatNote stat={stat} />}
+              </AnimatePresence>
             </div>
           );
         })}
